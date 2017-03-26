@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/de.tu_dortmund.javatemplates.feature_1.0.0.qualifier.jar" id="de.tu_dortmund.javatemplates.feature" version="1.0.0.qualifier">
+      <category name="de.tu_dortmund.javatemplates.category"/>
+   </feature>
+   <category-def name="de.tu_dortmund.javatemplates.category" label="JavaTemplates"/>
+</site>

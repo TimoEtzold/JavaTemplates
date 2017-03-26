@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="de.tu_dortmund.javatemplates.template" name="Template" schema="schema/templateplugin.template.exsd"/>
+   <extension
+         point="org.eclipse.jdt.core.compilationParticipant">
+      <compilationParticipant
+            class="de.tu_dortmund.javatemplates.plugin.CompilationParticipant"
+            id="templateplugin.compilationParticipant"
+            modifiesEnvironment="true">
+      </compilationParticipant>
+   </extension>
+   <extension
+         id="de.tu_dortmund.javatemplates.templateinfo"
+         name="TemplateInfo"
+         point="org.eclipse.core.resources.markers">
+      <persistent
+            value="true">
+      </persistent>
+      <super
+            type="org.eclipse.core.resources.textmarker">
+      </super>
+   </extension>
+   <extension
+         id="de.tu_dortmund.javatemplates.templateerror"
+         name="TemplateError"
+         point="org.eclipse.core.resources.markers">
+      <persistent
+            value="true">
+      </persistent>
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors.annotationTypes">
+      <type
+            markerType="de.tu_dortmund.javatemplates.templateinfo"
+            name="de.tu_dortmund.javatemplates.templateinfotype"
+            super="org.eclipse.jdt.ui.info">
+      </type>
+      <type
+            markerType="de.tu_dortmund.javatemplates.templateerror"
+            name="de.tu_dortmund.javatemplates.templateerrortype"
+            super="org.eclipse.jdt.ui.error">
+      </type>
+   </extension>
+   <extension
+         point="de.tu_dortmund.javatemplates.template">
+      <template
+            class="de.tu_dortmund.javatemplates.template.Template"
+            id="de.tu_dortmund.javatemplates.template"
+            name="Template">
+      </template>
+   </extension>
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <file-association
+            content-type="org.eclipse.jdt.core.javaSource"
+            file-extensions="javat">
+      </file-association>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="de.tu_dortmund.javatemplates.template"
+            name="JavaTemplate">
+      </category>
+      <wizard
+            category="de.tu_dortmund.javatemplates.template"
+            class="de.tu_dortmund.javatemplates.plugin.NewTemplateWizard"
+            id="de.tu_dortmund.javatemplates.plugin.newtemplatewizard"
+            name="Java Template Code">
+      </wizard>
+   </extension>
+
+</plugin>

@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Test
+Bundle-SymbolicName: de.tu_dortmund.javatemplates.test
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: TU Dortmund
+Fragment-Host: de.tu_dortmund.javatemplates;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
