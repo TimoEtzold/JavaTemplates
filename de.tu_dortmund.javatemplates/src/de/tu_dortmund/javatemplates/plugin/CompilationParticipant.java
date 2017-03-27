@@ -216,19 +216,11 @@ public class CompilationParticipant extends org.eclipse.jdt.core.compiler.Compil
     try {
       IMarker[] problems = file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO);
       
-      for(IMarker problem : problems){
-        if(problem.exists()){
-          if(isCreatedByReplacement((String) problem.getAttribute(IMarker.MESSAGE))){
-            problem.delete();
-          }
-        }
-      }
-      
-      problems = file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO);
-      
       String content = inputStreamToString(file.getContents());
-      ITemplate template = TemplateFactory.createTemplateForSource(content);
-      if(template != null){
+      
+      ITemplate template = TemplateFactory.createTemplateForSource(content);    
+      
+      if(template != null){       
         Matcher matcher = Pattern.compile(template.getRegex()).matcher(template.getCode());
         
         while(matcher.find()){
@@ -244,6 +236,14 @@ public class CompilationParticipant extends org.eclipse.jdt.core.compiler.Compil
             }
           }
         }
+        
+        for(IMarker problem : problems){
+          if(problem.exists()){
+            if(isCreatedByReplacement(template, problem)){
+              problem.delete();
+            }
+          }
+        }
       }
     } catch (CoreException e) {
       System.out.println("Could not adjust Markerpositions: " + e.getMessage());
@@ -256,10 +256,18 @@ public class CompilationParticipant extends org.eclipse.jdt.core.compiler.Compil
    * 
    * @param message the String to be checked.
    * @return {@code true} if it was created by the replacement, else {@code false}
+   * @throws CoreException 
    */
-  private boolean isCreatedByReplacement(String message){
-    if(message == null) return false;
-    return message.contains("TemplateStubClass") || message.contains("This method has a constructor name");
+  private boolean isCreatedByReplacement(ITemplate template, IMarker problem) throws CoreException{
+    if(problem == null || template == null) return false;
+    
+    Matcher matcher = Pattern.compile(template.getRegex()).matcher(template.getCode());
+    Integer iProblemStart = (Integer) problem.getAttribute(IMarker.CHAR_START);
+    while(matcher.find()){
+      if(matcher.start() == iProblemStart)
+        return true;
+    }
+    return false;
   }
   
   /** 
