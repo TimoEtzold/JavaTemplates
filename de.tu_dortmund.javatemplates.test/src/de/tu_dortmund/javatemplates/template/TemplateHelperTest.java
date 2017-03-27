@@ -13,6 +13,8 @@ import java.util.Map;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.junit.Test;
 
+import de.tu_dortmund.javatemplates.template.TemplateVariable.TYPE;
+
 public class TemplateHelperTest {
   
   @Test
@@ -44,7 +46,8 @@ public class TemplateHelperTest {
     attributes.put("AdditionalCodeBefore", "");
     attributes.put("ForwardedArguments", "");
     attributes.put("AdditionalCodeAfter", "");
-    TemplateVariable var = new TemplateVariable(null, null);
+    TemplateVariable var = new TemplateVariable(null, "ARGS");
+    var.setType((TYPE) null);
     
     //test
     TemplateHelper templateHelper = (TemplateHelper) TemplateUtils.getInstance().getTemplateHelper();

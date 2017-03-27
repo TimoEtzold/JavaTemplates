@@ -58,7 +58,7 @@ public class TemplateVariable {
    * 
    * @param sType the type of this template variable as String
    */
-  public void setType(String sType){
+  public void setType(String sType) throws IllegalArgumentException{
     if(StringUtils.equalsIgnoreCase(sType, TYPE.ARGS.toString())){
       setType(TYPE.ARGS);
     }
@@ -78,7 +78,7 @@ public class TemplateVariable {
       setType(TYPE.VALUE);
     }
     else 
-      System.err.println("Unknown Type: " + sType);
+      throw new IllegalArgumentException("Unknown Type: " + sType);
   }
 
   /**
