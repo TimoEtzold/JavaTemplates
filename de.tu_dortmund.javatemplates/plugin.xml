@@ -3,14 +3,6 @@
 <plugin>
    <extension-point id="de.tu_dortmund.javatemplates.template" name="Template" schema="schema/templateplugin.template.exsd"/>
    <extension
-         point="org.eclipse.jdt.core.compilationParticipant">
-      <compilationParticipant
-            class="de.tu_dortmund.javatemplates.plugin.CompilationParticipant"
-            id="templateplugin.compilationParticipant"
-            modifiesEnvironment="true">
-      </compilationParticipant>
-   </extension>
-   <extension
          id="de.tu_dortmund.javatemplates.templateinfo"
          name="TemplateInfo"
          point="org.eclipse.core.resources.markers">
@@ -54,13 +46,6 @@
       </template>
    </extension>
    <extension
-         point="org.eclipse.core.contenttype.contentTypes">
-      <file-association
-            content-type="org.eclipse.jdt.core.javaSource"
-            file-extensions="javat">
-      </file-association>
-   </extension>
-   <extension
          point="org.eclipse.ui.newWizards">
       <category
             id="de.tu_dortmund.javatemplates.template"
@@ -73,5 +58,14 @@
             name="Java Template Code">
       </wizard>
    </extension>
-
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="de.tu_dortmund.javatemplates.plugin.TemplateEditor"
+            default="false"
+            extensions="javat"
+            id="de.tu_dortmund.javatemplates.templateeditor"
+            name="Java Template Code Editor">
+      </editor>
+   </extension>
 </plugin>
