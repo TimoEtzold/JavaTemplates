@@ -80,10 +80,11 @@ public class TemplateHelper implements ITemplateHelper {
    * @return the source code of the template containing no errors created by template variables
    */
   public String fixErrors(String sSource){
-    StringBuffer sb = new StringBuffer();
+    StringBuffer sb = null;
     ITemplate template = TemplateFactory.createTemplateForSource(sSource);
     
     if(template != null && template.getRegex() != null){
+      sb = new StringBuffer();
       Matcher matcher = Pattern.compile(template.getRegex()).matcher(sSource);
       while(matcher.find()){
         TemplateVariable var = TemplateHelper.getTemplateVariableByName(template.getTemplateVariables(), matcher.group("name"));
@@ -92,7 +93,7 @@ public class TemplateHelper implements ITemplateHelper {
       matcher.appendTail(sb);
     }
     
-    return sb.toString();
+    return sb == null ? sSource : sb.toString();
   }
   
   /**
