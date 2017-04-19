@@ -80,15 +80,17 @@ public class TemplateHelper implements ITemplateHelper {
    * @return the source code of the template containing no errors created by template variables
    */
   public String fixErrors(String sSource){
+    StringBuffer sb = new StringBuffer();
     ITemplate template = TemplateFactory.createTemplateForSource(sSource);
     
-    Matcher matcher = Pattern.compile(template.getRegex()).matcher(sSource);
-    StringBuffer sb = new StringBuffer();
-    while(matcher.find()){
-      TemplateVariable var = TemplateHelper.getTemplateVariableByName(template.getTemplateVariables(), matcher.group("name"));
-      matcher.appendReplacement(sb, getReplacementForTemplateVariable(template, var));
+    if(template != null && template.getRegex() != null){
+      Matcher matcher = Pattern.compile(template.getRegex()).matcher(sSource);
+      while(matcher.find()){
+        TemplateVariable var = TemplateHelper.getTemplateVariableByName(template.getTemplateVariables(), matcher.group("name"));
+        matcher.appendReplacement(sb, getReplacementForTemplateVariable(template, var));
+      }
+      matcher.appendTail(sb);
     }
-    matcher.appendTail(sb);
     
     return sb.toString();
   }

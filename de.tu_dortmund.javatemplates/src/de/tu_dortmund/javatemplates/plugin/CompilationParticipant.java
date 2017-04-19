@@ -17,7 +17,12 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IPackageFragment;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.JavaModelException;
 
 import de.tu_dortmund.javatemplates.template.ITemplate;
 import de.tu_dortmund.javatemplates.template.ITemplateHelper;
@@ -49,7 +54,7 @@ public class CompilationParticipant extends org.eclipse.jdt.core.compiler.Compil
    */
   public int aboutToBuild(IJavaProject project) {
     removeTemplateMarker(project);
-    List<IFile> files = findTemplateFiles(project.getProject());
+    List<IFile> files = findTemplateFiles(project);
     ITemplateHelper templateHelper = TemplateUtils.getInstance().getTemplateHelper();
     for(IFile file : files){
       try {
@@ -135,6 +140,43 @@ public class CompilationParticipant extends org.eclipse.jdt.core.compiler.Compil
       System.out.println("Failure processing Container " + container.getName());
       e.printStackTrace();
     }
+    return files;
+  }
+  
+  /**
+   * Gathers all source-files which contain java template code in a given {@link IJavaProject}.
+   * 
+   * @param container the {@link IJavaProject} in which java template code files are searched
+   * @return a list of all files containing java template code
+   */
+  private List<IFile> findTemplateFiles(IJavaProject project){
+    List<IFile> files = new ArrayList<>();
+	  try {
+      IPackageFragmentRoot[] roots = project.getAllPackageFragmentRoots();
+      for(IPackageFragmentRoot root : roots){
+        if(root.getKind() == IPackageFragmentRoot.K_SOURCE){
+          for(IJavaElement javaElement : root.getChildren()){
+            if (javaElement.getElementType() == IJavaElement.PACKAGE_FRAGMENT) {
+              IPackageFragment fragment = (IPackageFragment) javaElement;
+              if(fragment.containsJavaResources()){
+                ICompilationUnit[] units = fragment.getCompilationUnits();
+                for(ICompilationUnit unit : units){
+                  IResource resource = unit.getUnderlyingResource();
+                  if("javat".equals(resource.getFileExtension())){
+                    if(resource instanceof IFile){
+                      files.add((IFile) resource);
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    } catch (JavaModelException e) {
+		System.err.println("An error occured while getting all java template code files.");
+		e.printStackTrace();
+	}
     return files;
   }
   
